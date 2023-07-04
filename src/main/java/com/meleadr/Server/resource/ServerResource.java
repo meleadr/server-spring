@@ -1,14 +1,24 @@
 package com.meleadr.Server.resource;
 
 import com.meleadr.Server.model.Response;
+import com.meleadr.Server.model.Server;
 import com.meleadr.Server.service.implementation.ServerServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.Map;
+
+import static com.meleadr.Server.enumeration.Status.SERVER_UP;
+import static java.time.LocalDateTime.now;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/server")
@@ -20,7 +30,7 @@ public class ServerResource {
     public ResponseEntity<Response> getServers() {
         return ResponseEntity.ok(
                 Response.builder()
-                        .timestamp(LocalDateTime.now())
+                        .timestamp(now())
                         .data(Map.of("servers", serverService.list(10)))
                         .message("Servers listed successfully")
                         .status(OK)
@@ -29,55 +39,46 @@ public class ServerResource {
         );
     }
 
-    @RequestMapping("/ping")
-    public ResponseEntity<Response> pingServer(@RequestParam String ipAddress) throws IOException {
+    @RequestMapping("/ping/{ipAddress}")
+    public ResponseEntity<Response> pingServer(@PathVariable String ipAddress) throws IOException {
+        Server server = serverService.ping(ipAddress);
         return ResponseEntity.ok(
                 Response.builder()
-                        .timestamp(LocalDateTime.now())
-                        .data(Map.of("server", serverService.ping(ipAddress)))
-                        .message("Server pinged successfully")
+                        .timestamp(now())
+                        .data(Map.of("server", server))
+                        .message(server.getStatus() == SERVER_UP ? "Server pinged successfully" : "Server is down")
                         .status(OK)
                         .statusCode(OK.value())
                         .build()
         );
     }
 
-    @RequestMapping("/create")
-    public ResponseEntity<Response> createServer(@RequestBody Server server) {
+    @RequestMapping("/save")
+    public ResponseEntity<Response> saveServer(@RequestBody @Valid Server server) throws IOException {
         return ResponseEntity.ok(
                 Response.builder()
-                        .timestamp(LocalDateTime.now())
+                        .timestamp(now())
                         .data(Map.of("server", serverService.create(server)))
-                        .message("Server created successfully")
+                        .message("Server pinged successfully")
+                        .status(CREATED)
+                        .statusCode(CREATED.value())
+                        .build()
+        );
+    }
+
+    @RequestMapping("/get/{id}")
+    public ResponseEntity<Response> getServer(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timestamp(now())
+                        .data(Map.of("server", serverService.get(id)))
+                        .message("Server retrieved successfully")
                         .status(OK)
                         .statusCode(OK.value())
                         .build()
         );
     }
 
-    @RequestMapping("/update")
-    public ResponseEntity<Response> updateServer(@RequestBody Server server) {
-        return ResponseEntity.ok(
-                Response.builder()
-                        .timestamp(LocalDateTime.now())
-                        .data(Map.of("server", serverService.update(server)))
-                        .message("Server updated successfully")
-                        .status(OK)
-                        .statusCode(OK.value())
-                        .build()
-        );
-    }
 
-    @RequestMapping("/delete")
-    public ResponseEntity<Response> deleteServer(@RequestParam Long id) {
-        return ResponseEntity.ok(
-                Response.builder()
-                        .timestamp(LocalDateTime.now())
-                        .data(Map.of("server", serverService.delete(id)))
-                        .message("Server deleted successfully")
-                        .status(OK)
-                        .statusCode(OK.value())
-                        .build()
-        );
-    }
+
 }

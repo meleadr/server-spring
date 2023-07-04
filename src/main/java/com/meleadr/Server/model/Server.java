@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import static jakarta.persistence.GenerationType.AUTO;
+
 @Entity
 @Data
 @NoArgsConstructor

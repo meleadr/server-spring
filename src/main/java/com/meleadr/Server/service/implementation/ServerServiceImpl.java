@@ -1,5 +1,6 @@
 package com.meleadr.Server.service.implementation;
 
+import com.meleadr.Server.enumeration.Status;
 import com.meleadr.Server.model.Server;
 import com.meleadr.Server.repo.ServerRepo;
 import com.meleadr.Server.service.ServerService;
