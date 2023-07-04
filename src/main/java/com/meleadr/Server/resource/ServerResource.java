@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Map;
@@ -67,7 +64,7 @@ public class ServerResource {
     }
 
     @RequestMapping("/get/{id}")
-    public ResponseEntity<Response> getServer(@PathVariable Long id) {
+    public ResponseEntity<Response> getServer(@PathVariable("id") Long id) {
         return ResponseEntity.ok(
                 Response.builder()
                         .timestamp(now())
@@ -79,6 +76,17 @@ public class ServerResource {
         );
     }
 
-
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Response> deleteServer(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(
+                Response.builder()
+                        .timestamp(now())
+                        .data(Map.of("server", serverService.delete(id)))
+                        .message("Server deleted successfully")
+                        .status(OK)
+                        .statusCode(OK.value())
+                        .build()
+        );
+    }
 
 }
