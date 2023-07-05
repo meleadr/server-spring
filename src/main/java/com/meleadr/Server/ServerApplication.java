@@ -24,9 +24,9 @@ public class ServerApplication {
 	 CommandLineRunner runner(ServerRepo serverRepo) {
 		return args -> {
 			serverRepo.save(new Server(null, "192.168.0.1", "Server 1", "16GB", "Dedicated", "https://www.google.com", Status.SERVER_UP));
-			serverRepo.save(new Server(null, "192.168.0.2", "Server 2", "16GB", "Dedicated", "https://www.google.com", Status.SERVER_UP));
-			serverRepo.save(new Server(null, "192.168.0.3", "Server 3", "16GB", "Dedicated", "https://www.google.com", Status.SERVER_UP));
-			serverRepo.save(new Server(null, "192.168.0.4", "Server 4", "16GB", "Dedicated", "https://www.google.com", Status.SERVER_UP));
+			serverRepo.save(new Server(null, "192.168.0.2", "Server 2", "8GB", "App Web", "https://www.google.com", Status.SERVER_UP));
+			serverRepo.save(new Server(null, "192.168.0.3", "Server 3", "4GB", "Website", "https://www.google.com", Status.SERVER_UP));
+			serverRepo.save(new Server(null, "192.168.0.4", "Server 4", "64GB", "Mutu", "https://www.google.com", Status.SERVER_UP));
 		};
 	 }
 
