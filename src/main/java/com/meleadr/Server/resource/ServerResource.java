@@ -5,12 +5,12 @@ import com.meleadr.Server.model.Server;
 import com.meleadr.Server.service.implementation.ServerServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.meleadr.Server.enumeration.Status.SERVER_UP;
 import static java.time.LocalDateTime.now;
@@ -24,7 +24,8 @@ public class ServerResource {
     private final ServerServiceImpl serverService;
 
     @RequestMapping("/list")
-    public ResponseEntity<Response> getServers() {
+    public ResponseEntity<Response> getServers() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(3);
         return ResponseEntity.ok(
                 Response.builder()
                         .timestamp(now())
@@ -51,7 +52,7 @@ public class ServerResource {
     }
 
     @RequestMapping("/save")
-    public ResponseEntity<Response> saveServer(@RequestBody @Valid Server server) throws IOException {
+    public ResponseEntity<Response> saveServer(@RequestBody @Valid Server server) {
         return ResponseEntity.ok(
                 Response.builder()
                         .timestamp(now())
